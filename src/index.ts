@@ -1,15 +1,17 @@
-import express from "express";
+async function main() {
+  try {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL is not defined");
+    }
+    const { sql } = await import("./db/index.js");
 
-const app = express();
-const PORT = 8000;
+    console.log("Database connection test...");
+    await sql`SELECT 1`;
+    console.log("✅ Connection established.");
+  } catch (error) {
+    console.error("❌ Error:", error);
+    process.exitCode = 1;
+  }
+}
 
-app.use(express.json()); // Use JSON middleware
-
-//Get route that retuns a short message
-app.get("/", (req, res) =>{
-    res.send("Server is running");
-})
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`);
-});
+void main();
