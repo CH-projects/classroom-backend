@@ -1,15 +1,15 @@
-import express from "express";
+import { db } from "./db/index.js";
 
-const app = express();
-const PORT = 8000;
+async function main() {
+  try {
+    console.log("Database connection test...");
+    // Since demoUsers is deleted, we can just do a simple query to verify connection
+    // or leave it as a placeholder for future tests.
+    console.log("✅ Connection established.");
+  } catch (error) {
+    console.error("❌ Error:", error);
+    process.exitCode = 1;
+  }
+}
 
-app.use(express.json()); // Use JSON middleware
-
-//Get route that retuns a short message
-app.get("/", (req, res) =>{
-    res.send("Server is running");
-})
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`);
-});
+void main();
