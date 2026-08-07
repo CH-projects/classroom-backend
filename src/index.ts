@@ -1,10 +1,12 @@
-import { db } from "./db/index.js";
-
 async function main() {
   try {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL is not defined");
+    }
+    const { sql } = await import("./db/index.js");
+
     console.log("Database connection test...");
-    // Since demoUsers is deleted, we can just do a simple query to verify connection
-    // or leave it as a placeholder for future tests.
+    await sql`SELECT 1`;
     console.log("✅ Connection established.");
   } catch (error) {
     console.error("❌ Error:", error);
