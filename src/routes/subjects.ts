@@ -63,7 +63,7 @@ router.get("/", async (req, res) => {
            department: { ...getTableColumns(departments) }
           }).from(subjects).leftJoin(departments, eq(subjects.departmentId, departments.id))
            .where(whereClause)
-           .orderBy(desc(subjects.created), subjects.id)
+           .orderBy(desc(subjects.createdAt), subjects.id)
            .limit(limitPerPage)
            .offset(offset);
 

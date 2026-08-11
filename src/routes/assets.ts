@@ -16,6 +16,9 @@ router.post("/cleanup", async (req, res) => {
       return res.status(500).json({ error: "Server configuration error" });
   }
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
   try {
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/delete_by_token`,
@@ -25,6 +28,7 @@ router.post("/cleanup", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ token }),
+        signal: controller.signal,
       }
     );
 
@@ -38,6 +42,8 @@ router.post("/cleanup", async (req, res) => {
   } catch (error) {
     console.error("Cloudinary cleanup error:", error);
     return res.status(500).json({ error: "Failed to cleanup asset" });
+  } finally {
+    clearTimeout(timeoutId);
   }
 });
 
