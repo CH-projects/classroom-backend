@@ -15,6 +15,13 @@
       "when": 1786111930802,
       "tag": "0001_true_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786437440041,
+      "tag": "0002_aberrant_rogue",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,6 @@
 import express from "express";
 import subjectsRouter from "./routes/subjects.js";
+import assetsRouter from "./routes/assets.js";
 import cors from "cors";
 import helmet from "helmet";
 
@@ -15,6 +16,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api/subjects', subjectsRouter);
+app.use('/api/assets', assetsRouter);
 
 app.get("/", (_req, res) => {
   res.send("Server is running");
