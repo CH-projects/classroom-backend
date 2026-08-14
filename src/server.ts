@@ -3,8 +3,13 @@ import subjectsRouter from "./routes/subjects.js";
 import assetsRouter from "./routes/assets.js";
 import cors from "cors";
 import helmet from "helmet";
+import securityMiddleware from "./middleware/security.js";
 
 const app = express();
+
+app.use(securityMiddleware);
+
+
 app.use(helmet());
 const PORT = 8000;
 app.use(cors({
