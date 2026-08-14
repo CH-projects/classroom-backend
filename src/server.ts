@@ -7,9 +7,6 @@ import securityMiddleware from "./middleware/security.js";
 
 const app = express();
 
-app.use(securityMiddleware);
-
-
 app.use(helmet());
 const PORT = 8000;
 app.use(cors({
@@ -19,6 +16,8 @@ app.use(cors({
 }))
 
 app.use(express.json());
+
+app.use(securityMiddleware);
 
 app.use('/api/subjects', subjectsRouter);
 app.use('/api/assets', assetsRouter);

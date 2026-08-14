@@ -21,9 +21,10 @@ const securityMiddleware = async (req:Request, res:Response, next:NextFunction) 
                 limit = 10;
                 message = 'User request limit exceeded (10 per minute) please wait.';
                 break;
-            default: 5;
-            message = 'Guest reguest limit exceeded (5 per minute). Please sign up for higher limits)';
-            break;
+            default:
+                limit = 5;
+                message = 'Guest reguest limit exceeded (5 per minute). Please sign up for higher limits)';
+                break;
         }
 
         const client = aj.withRule(
@@ -43,19 +44,19 @@ const securityMiddleware = async (req:Request, res:Response, next:NextFunction) 
 
         }
 
-        const decision = await client.process(arcJetRequest);
+        const decision = await client.protect(arcJetRequest);
 
-        if(decision.isDenied() && decision.reason.isBot()){
-            return res.status(403).json({error: 'Forbidden', message: 'Automated requests are not allowed.'});
-        }
-        if(decision.isDenied() && decision.reason.isShield()){
-            return res.status(403).json({error: 'Forbidden', message: 'Request is blocked by security policy.'});
-        }
-        if(decision.isDenied() && decision.reason.isRateLimit()){
-            return res.status(403).json({error: 'Too many requests.', message});
-        }
-        if(decision.isDenied() && decision.reason.isBot()){
-            return res.status(403).json({error: 'Forbidden', message: 'Automated requests are not allowed.'});
+        if(decision.isDenied()){
+            if(decision.reason.isBot()){
+                return res.status(403).json({error: 'Forbidden', message: 'Automated requests are not allowed.'});
+            }
+            if(decision.reason.isShield()){
+                return res.status(403).json({error: 'Forbidden', message: 'Request is blocked by security policy.'});
+            }
+            if(decision.reason.isRateLimit()){
+                return res.status(403).json({error: 'Too many requests.', message});
+            }
+            return res.status(403).json({error: 'Forbidden', message: 'Access denied by security policy.'});
         }
 
         next();
